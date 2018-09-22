@@ -15,7 +15,7 @@
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
 // Package eth implements the Ethereum protocol.
-package eth
+package plasma
 
 import (
 	"errors"
@@ -114,7 +114,7 @@ func New(ctx *node.ServiceContext, config *Config) (*Ethereum, error) {
 		config.MinerGasPrice = new(big.Int).Set(DefaultConfig.MinerGasPrice)
 	}
 	// Assemble the Ethereum object
-	chainDb, err := CreateDB(ctx, config, "chaindata")
+	chainDb, err := CreateDB(ctx, config, "plasmachaindata")
 	if err != nil {
 		return nil, err
 	}
@@ -210,7 +210,7 @@ func CreateDB(ctx *node.ServiceContext, config *Config, name string) (ethdb.Data
 		return nil, err
 	}
 	if db, ok := db.(*ethdb.LDBDatabase); ok {
-		db.Meter("eth/db/chaindata/")
+		db.Meter("eth/db/plasmachaindata/")
 	}
 	return db, nil
 }
