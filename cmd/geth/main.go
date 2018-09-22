@@ -154,6 +154,10 @@ var (
 		utils.WhisperRestrictConnectionBetweenLightClientsFlag,
 	}
 
+	plasmaFlags = []cli.Flag{
+ 		utils.PlasmaEnabledFlag,
+ 	}
+
 	metricsFlags = []cli.Flag{
 		utils.MetricsEnableInfluxDBFlag,
 		utils.MetricsInfluxDBEndpointFlag,
@@ -204,6 +208,7 @@ func init() {
 	app.Flags = append(app.Flags, consoleFlags...)
 	app.Flags = append(app.Flags, debug.Flags...)
 	app.Flags = append(app.Flags, whisperFlags...)
+	app.Flags = append(app.Flags, plasmaFlags...)
 	app.Flags = append(app.Flags, metricsFlags...)
 
 	app.Before = func(ctx *cli.Context) error {
