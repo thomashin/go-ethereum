@@ -1357,7 +1357,24 @@ func SetPlsConfig(ctx *cli.Context, stack *node.Node, cfg *plasma.Config) {
 		if !ctx.GlobalIsSet(NetworkIdFlag.Name) {
 			cfg.NetworkId = 16
 		}
-		cfg.Genesis = core.DefaultPlasmaGenesisBlock()
+		var (
+			developer accounts.Account
+			err       error
+		)
+		if accs := ks.Accounts(); len(accs) > 0 {
+			developer = ks.Accounts()[0]
+		} else {
+			developer, err = ks.NewAccount("")
+			if err != nil {
+				Fatalf("Failed to create developer account: %v", err)
+			}
+		}
+		if err := ks.Unlock(developer, ""); err != nil {
+			Fatalf("Failed to unlock developer account: %v", err)
+		}
+		log.Info("Using developer account", "address", developer.Address)
+
+		cfg.Genesis = core.DefaultPlasmaGenesisBlock(developer.Address)
 	case ctx.GlobalBool(TestnetFlag.Name):
 		if !ctx.GlobalIsSet(NetworkIdFlag.Name) {
 			cfg.NetworkId = 3
